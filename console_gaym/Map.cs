@@ -36,6 +36,15 @@ namespace console_gaym
                 TextMap[cord.X, cord.Y] = Settings.SnakeSymbol;
             }
         }
+        //draw bonus
+        public void AddFood(Coord food)
+        {
+            TextMap[food.X, food.Y] = Settings.FoodSymbol;
+        }
+        public void RemoveFood(Coord food)
+        {
+            TextMap[food.X, food.Y] = Settings.EmptyMapSymbol;
+        }
 
         //очищаем символы вокруг заданного. Гораздо проще стереть последний сектор змеи, чем стирать всю таблицу каждый раз
         private void ClearNear(Coord goal)

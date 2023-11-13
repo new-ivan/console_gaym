@@ -17,15 +17,20 @@ namespace console_gaym
         public Snake Oleg;
         Map Map;
         bool ispause;
+        Coord FoodCords;
+        bool createfood = false;
+        Random random;
 
         //starts the game
         public async Task Start()
         {
+            random = new Random();
             stopgame = false;
             readthread.Start();
             Oleg = new Snake(width, height);
             Map = new Map(width, height);
             ispause = false;
+            FoodCords = new(random.Next(1,Settings.MapWidth),random.Next(1,Settings.MapHeight));
 
             while (!stopgame)
             {
@@ -50,15 +55,29 @@ namespace console_gaym
         }
         public void GameTick()
         {
-            Oleg.Move();
+            Oleg.Move(FoodCords);
             if (!Oleg.isalive)
             {
                 EndGame();
                 return;
             }
+            if (Oleg.ate)
+            {
+                Oleg.Grow();
+                Map.RemoveFood(FoodCords);
+                createfood = true;
+            }
             Map.AddSnake(Oleg);
+            Map.AddFood(FoodCords);
             Console.Clear();
             Map.DrawMap();
+            
+
+            if(createfood)
+            {
+                createfood = false;
+                FoodCords = new(random.Next(0,Settings.MapWidth),random.Next(0,Settings.MapHeight));
+            }
         }
 
         private void EndGame()
@@ -105,7 +124,7 @@ namespace console_gaym
                         ispause = !ispause;
                         break;
 
-                        //дальше идут отладочные
+                    //дальше идут отладочные
                     case (int)ConsoleKey.Enter:
                         Map.DrawMap();
                         break;
@@ -115,12 +134,16 @@ namespace console_gaym
                         break;
 
                     case (int)ConsoleKey.T:
-                        Console.WriteLine("уже прошло {0} тиков",ticks); 
+                        Console.WriteLine("уже прошло {0} тиков", ticks);
                         break;
 
-                    case (int)ConsoleKey.G:
-                        Oleg.Move();
+                    case (int)ConsoleKey.H:
+                        Oleg.Move(FoodCords);
                         Map.AddSnake(Oleg);
+                        break;
+
+                    case (int)ConsoleKey.OemPlus: 
+                        Oleg.Grow();
                         break;
 
                     default:

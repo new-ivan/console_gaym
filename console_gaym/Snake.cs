@@ -11,7 +11,7 @@ namespace console_gaym
         public List<Coord> Cords { get; set; }
         bool isadding = false;
         int dx, dy, maxx, maxy;
-        public bool isalive;
+        public bool isalive, ate = false;
         public Snake(int maxx, int maxy)
         {
             Cords = new List<Coord>
@@ -26,8 +26,9 @@ namespace console_gaym
         }
 
 
+
         //когда змейка двигается, то все её прошлые сегменты встают на место следующего, а первый двигается вперёд
-        public void Move()
+        public void Move(Coord FoodCord)
         {
             for(int i = Cords.Count - 1; i > 0; i--)
             {
@@ -44,6 +45,8 @@ namespace console_gaym
 
             if(Cords.First().X < 0 || Cords.First().X >= maxx || Cords.First().Y < 0 || Cords.First().Y >= maxy)
                 isalive = false;
+            if (Cords.First().X == FoodCord.X && Cords.First().Y == FoodCord.Y)
+                ate = true;
         }
         public void Turn(int dx, int dy)
         {
@@ -52,8 +55,9 @@ namespace console_gaym
         }
         public void Grow() //добавляем ещё один сегмент в тех же координатах, что и прошлый
         {
+            ate = false;
             isadding = true;
-            Cords.Add(Cords.Last());
+            Cords.Add(new(Cords.Last().X, Cords.Last().Y));
         }
     }
 }

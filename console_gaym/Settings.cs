@@ -12,6 +12,7 @@ namespace console_gaym
         static public int MapWidth = 20;
         static public char SnakeSymbol = 'D';
         static public char EmptyMapSymbol = '.';
+        static public char FoodSymbol = '*';
         static public int TickSpeed = 100;
         static public int TicksUntillUpdate = 10;
     }
